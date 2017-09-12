@@ -1,5 +1,6 @@
 import os
 import socket
+import json
 
 from flask import Flask, request
 
@@ -19,8 +20,11 @@ def return_hostname():
 
 @app.route("/version/")
 def return_version():
-    return "version 1.1 on host {}".format(socket.gethostname())
+    return "version 1.10 on host {}".format(socket.gethostname())
 
+@app.route("/headers/")
+def return_headers():
+    return str(request.headers)
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
