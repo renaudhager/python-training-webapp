@@ -20,11 +20,16 @@ def return_hostname():
 
 @app.route("/version/")
 def return_version():
-    return "version 1.10 on host {}".format(socket.gethostname())
+    return "version 1.22 on host {}".format(socket.gethostname())
 
 @app.route("/headers/")
 def return_headers():
     return str(request.headers)
+
+@app.route("/http_code")
+def return_http_code():
+    code = request.args.get('code', default = 200, type = int)
+    return str(code), code
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
