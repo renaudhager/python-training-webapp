@@ -32,7 +32,7 @@ def return_http_code():
     return str(code), code
 
 @app.route("/health")
-def return_http_code():
+def return_health():
     code = request.args.get('code', default = 200, type = int)
     return "Healthy", 200
 
