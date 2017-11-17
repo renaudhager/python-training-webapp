@@ -20,7 +20,7 @@ def return_hostname():
 
 @app.route("/version")
 def return_version():
-    return "version 1.22 on host {}".format(socket.gethostname())
+    return "version 1.23 on host {}".format(socket.gethostname())
 
 @app.route("/headers")
 def return_headers():
