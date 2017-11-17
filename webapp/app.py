@@ -13,16 +13,16 @@ def hello():
     return 'Hello '+provider+'!'
 
 
-@app.route("/hostname/")
+@app.route("/hostname")
 def return_hostname():
     return "This is an example wsgi app served from {} to {}".format(socket.gethostname(), request.remote_addr)
 
 
-@app.route("/version/")
+@app.route("/version")
 def return_version():
     return "version 1.22 on host {}".format(socket.gethostname())
 
-@app.route("/headers/")
+@app.route("/headers")
 def return_headers():
     return str(request.headers)
 
@@ -30,6 +30,11 @@ def return_headers():
 def return_http_code():
     code = request.args.get('code', default = 200, type = int)
     return str(code), code
+
+@app.route("/health")
+def return_http_code():
+    code = request.args.get('code', default = 200, type = int)
+    return "Healthy", 200
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
