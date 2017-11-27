@@ -12,31 +12,36 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     provider = str(os.environ.get('PROVIDER', 'world'))
-    statsd.increment('hagerren.page.root.hits')
+    statsd.increment('hagerren.page.index.hits')
     return 'Hello ' + provider + '!'
 
 
 @app.route("/hostname")
 def return_hostname():
+    statsd.increment('hagerren.page.hostname.hits')
     return "This is an example wsgi app served from {} to {}".format(socket.gethostname(), request.remote_addr)
 
 
 @app.route("/version")
 def return_version():
-    return "version 1.25 on host {}".format(socket.gethostname())
+    statsd.increment('hagerren.page.version.hits')
+    return "version 1.26 on host {}".format(socket.gethostname())
 
 @app.route("/headers")
 def return_headers():
+    statsd.increment('hagerren.page.headers.hits')
     return str(request.headers)
 
 @app.route("/http_code")
 def return_http_code():
     code = request.args.get('code', default = 200, type = int)
+    statsd.increment('hagerren.page.http_code.hits')
     return str(code), code
 
 @app.route("/health")
 def return_health():
     code = request.args.get('code', default = 200, type = int)
+    statsd.increment('hagerren.page.health.hits')
     return "Healthy", 200
 
 if __name__ == '__main__':
