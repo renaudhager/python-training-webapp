@@ -1,16 +1,19 @@
 import os
 import socket
 import json
+from datadog import initialize, statsd
 
 from flask import Flask, request
 
+initialize(statsd_host=os.environ['HOST'], statsd_port=8125)
 app = Flask(__name__)
 
 
 @app.route('/')
 def hello():
     provider = str(os.environ.get('PROVIDER', 'world'))
-    return 'Hello '+provider+'!'
+    statsd.increment('hagerren.page.root.hits')
+    return 'Hello ' + provider + '!'
 
 
 @app.route("/hostname")
@@ -20,7 +23,7 @@ def return_hostname():
 
 @app.route("/version")
 def return_version():
-    return "version 1.23 on host {}".format(socket.gethostname())
+    return "version 1.25 on host {}".format(socket.gethostname())
 
 @app.route("/headers")
 def return_headers():
