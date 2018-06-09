@@ -1,16 +1,19 @@
-NAME = renaudhager/python-training-webapp
+IMAGE_NAME = renaudhager/python-training-webapp
 
-GIT_TAG := $(shell git describe --abbrev=0 --tags --exact-match)
+ifndef IMAGE_VERSION
+    IMAGE_VERSION := $(shell git describe --abbrev=0 --tags --exact-match)
+endif
+
 
 all: build tag_latest
 
 build:
-	docker build --tag="$(NAME):$(GIT_TAG)" .
+	docker build --tag="$(IMAGE_NAME):$(IMAGE_VERSION)" .
 
 tag_latest:
-	docker tag $(NAME):$(GIT_TAG) $(NAME):latest
+	docker tag $(IMAGE_NAME):$(IMAGE_VERSION) $(IMAGE_NAME):latest
 
 push:
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
-	docker push "$(NAME):$(GIT_TAG)"
-	docker push "$(NAME):latest"
+	docker push "$(IMAGE_NAME):$(GIT_IMAGE_VERSIONTAG)"
+	docker push "$(IMAGE_NAME):latest"
