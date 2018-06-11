@@ -15,5 +15,5 @@ tag_latest:
 
 push:
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
-	docker push "$(IMAGE_NAME):$(GIT_IMAGE_VERSIONTAG)"
+	docker push "$(IMAGE_NAME):$(IMAGE_VERSION)"
 	docker push "$(IMAGE_NAME):latest"
