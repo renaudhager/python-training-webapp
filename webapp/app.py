@@ -11,8 +11,10 @@ if 'HOST' in os.environ:
 app = Flask(__name__)
 
 
-def push_to_statsd(metric_name):
-    if 'HOST' in os.environ:
+def push_to_statsd(page_name):
+    if ('HOST' in os.environ) and ('MARATHON_APP_ID' in os.environ) :
+        app_name = os.environ['MARATHON_APP_ID'].split('/')[-1]
+        metric_name = app_name + ".page." + page_name + ".hits"
         statsd.increment(metric_name)
 
 @app.route('/')
@@ -29,30 +31,31 @@ def polly_create_root_account():
 
 @app.route("/hostname")
 def return_hostname():
-    push_to_statsd('hagerren.page.hostname.hits')
+    push_to_statsd('hostname')
     return "This is an example wsgi app served from {} to {}".format(socket.gethostname(), request.remote_addr)
 
 
 @app.route("/version")
 def return_version():
-    push_to_statsd('hagerren.page.version.hits')
+    push_to_statsd('version')
     return "version 1.26 on host {}".format(socket.gethostname())
 
 @app.route("/headers")
 def return_headers():
-    push_to_statsd('hagerren.page.headers.hits')
+    push_to_statsd('headers')
+    print str(request.headers)
     return str(request.headers)
 
 @app.route("/http_code")
 def return_http_code():
     code = request.args.get('code', default = 200, type = int)
-    push_to_statsd('hagerren.page.http_code.hits')
+    push_to_statsd('http_code')
     return str(code), code
 
 @app.route("/health")
 def return_health():
     code = request.args.get('code', default = 200, type = int)
-    push_to_statsd('hagerren.page.health.hits')
+    push_to_statsd('health')
     return "Healthy", 200
 
 if __name__ == '__main__':
