@@ -1,19 +1,21 @@
 IMAGE_NAME = renaudhager/python-training-webapp
 
-ifndef IMAGE_VERSION
-    IMAGE_VERSION := $(shell git describe --abbrev=0 --tags --exact-match)
+ifndef VERSION
+    VERSION := $(shell git describe --abbrev=0 --tags --exact-match)
 endif
 
+.PHONY: all
+all: build tag
 
-all: build tag_latest
-
+.PHONY: build
 build:
-	docker build --tag="$(IMAGE_NAME):$(IMAGE_VERSION)" .
+	docker build --tag="$(IMAGE_NAME):$(VERSION)" .
 
-tag_latest:
-	docker tag $(IMAGE_NAME):$(IMAGE_VERSION) $(IMAGE_NAME):latest
+.PHONY: tag_latest
+tag:
+	docker tag "$(IMAGE_NAME):$(VERSION)" "$(IMAGE_NAME):latest"
 
+.PHONY: push
 push:
-	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
-	docker push "$(IMAGE_NAME):$(IMAGE_VERSION)"
+	docker push "$(IMAGE_NAME):$(VERSION)"
 	docker push "$(IMAGE_NAME):latest"
